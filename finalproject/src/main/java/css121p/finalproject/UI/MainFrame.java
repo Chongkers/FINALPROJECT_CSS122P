@@ -80,7 +80,6 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Real Estates Management App");
         setBackground(new java.awt.Color(51, 51, 51));
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new java.awt.BorderLayout());
@@ -334,7 +333,7 @@ public class MainFrame extends javax.swing.JFrame {
             Buyer b = new Buyer(name, contact);
 
             database.reportLot(block, lot);
-            showLotDetailsPopup(block, lot);
+            showLotDetailsPopup(database.findLot(block, lot));
 
             if (database.getLotStatus(block, lot) == AVAILABLE) {
                 database.processReservation(b, block, lot);
@@ -353,7 +352,7 @@ public class MainFrame extends javax.swing.JFrame {
             JPanel targetTab;
 
             if (index == -1) {
-                targetTab = new JPanel(new java.awt.FlowLayout());
+                targetTab = new JPanel(new java.awt.GridLayout());
                 targetTab.add(new JLabel("Welcome " + name));
                 targetTab.add(new JLabel("Actions for " + name));
                 buyerTab.addTab(name, targetTab);
@@ -429,7 +428,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             database.reportLot(block, lot);
 
-            showLotDetailsPopup(block, lot);
+            showLotDetailsPopup(database.findLot(block, lot));
 
             if (database.getLotStatus(block, lot) == AVAILABLE) {
                 database.processPurchase(b, block, lot);
@@ -450,7 +449,7 @@ public class MainFrame extends javax.swing.JFrame {
             JPanel targetTab;
 
             if (index == -1) {
-                targetTab = new JPanel(new java.awt.FlowLayout());
+                targetTab = new JPanel(new java.awt.GridLayout());
                 targetTab.add(new JLabel("Welcome " + name));
                 targetTab.add(new JLabel("Actions for " + name));
                 buyerTab.addTab(name, targetTab);
@@ -471,13 +470,10 @@ public class MainFrame extends javax.swing.JFrame {
                 }
 
                 javax.swing.JOptionPane.showMessageDialog(this, "Lot sold!");
+                setUpHouseGrid();
                 targetTab.revalidate();
                 targetTab.repaint();
             });
-
-            targetTab.revalidate();
-            targetTab.repaint();
-            setUpHouseGrid();
 
             javax.swing.JOptionPane.showMessageDialog(this, "Purchase Successful");
 
@@ -557,24 +553,12 @@ public class MainFrame extends javax.swing.JFrame {
     HouseGrid.revalidate();
     HouseGrid.repaint();
 }
-    public void showLotDetailsPopup(int block, int lotNum) {
-    // 1. Redirect System.out to a temporary stream
-    java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-    java.io.PrintStream ps = new java.io.PrintStream(baos);
-    java.io.PrintStream old = System.out;
-    System.setOut(ps);
+    public void showLotDetailsPopup(Lot lot) {
+        String output = css121p.finalproject.database.InventorySystem.getInstance()
+                .reportLot(lot.getBlockNo(), lot.getHouseNo());
+        javax.swing.JOptionPane.showMessageDialog(this, output, "Lot Information", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
-    // 2. Call your existing method from the instance
-    css121p.finalproject.database.InventorySystem.getInstance().reportLot(block, lotNum);
-
-    // 3. Restore the original System.out
-    System.out.flush();
-    System.setOut(old);
-
-    // 4. Show the captured string in a popup
-    String output = baos.toString();
-    javax.swing.JOptionPane.showMessageDialog(this, output, "Lot Details", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-}
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
