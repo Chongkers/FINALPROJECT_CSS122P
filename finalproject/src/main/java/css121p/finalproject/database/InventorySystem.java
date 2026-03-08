@@ -8,7 +8,7 @@ import css121p.finalproject.data.Status;
 import css121p.finalproject.data.Buyer;
 import css121p.finalproject.data.Block;
 import javax.swing.table.DefaultTableModel;
-
+import java.util.ArrayList;
 /**
  *
  * @author Jan Denisse
@@ -122,5 +122,30 @@ public class InventorySystem {
                "Price: PHP " + formattedPrice);
         }
         else {return ("Error: Lot not found at Block " + x + ", Lot " + y);}
+    }
+    
+    public void searchLot(String minSizeStr, String maxPriceStr){
+    try{
+        tableReport.setRowCount(0);
+        double minSize = minSizeStr.isEmpty() ? 0: Double.parseDouble(minSizeStr);
+        double maxPrice = maxPriceStr.isEmpty() ? Double.MAX_VALUE: Double.parseDouble(maxPriceStr);
+
+        
+        for (Block b : blocks){
+            for (Lot l : b.getLots()) {
+                if(l.getSqMeters() >= minSize && l.calculateFinalprice() <= maxPrice){
+                    Object [] rowData = {
+                        b.getBlockNo(),
+                        l.getHouseNo(),
+                        l.getHouseStatus(),
+                        l.getSqMeters(),
+                        l.calculateFinalprice(),
+                        l.getResidentName()
+                    }; tableReport.addRow(rowData);
+                }   
+            }
+        }
+    }catch(NumberFormatException e){System.out.println("Invalid input: Please enter numbers only.");}
+
     }
 }
