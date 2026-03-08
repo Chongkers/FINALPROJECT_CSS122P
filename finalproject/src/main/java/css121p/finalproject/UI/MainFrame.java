@@ -16,6 +16,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.border.EmptyBorder;
 import java.awt.Component;
+import javax.swing.table.TableRowSorter;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.DocumentEvent;
 
 
 
@@ -37,7 +41,6 @@ public class MainFrame extends javax.swing.JFrame {
         setUpHouseGrid();
         InventorySystem.getInstance().tableReport.setRowCount(0);
         InventorySystem.getInstance().reportLot();
-        
     }
 
     /**
@@ -58,10 +61,16 @@ public class MainFrame extends javax.swing.JFrame {
         HouseGrid = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        TableReport = new javax.swing.JPanel();
+        SearchPanel = new javax.swing.JPanel();
+        txtSearchSize = new javax.swing.JTextField();
+        txtSearchPrice = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        SearchBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
+        ClientTab = new javax.swing.JPanel();
         buyerTab = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -76,6 +85,20 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        txtBlock = new javax.swing.JTextField();
+        txtPrice = new javax.swing.JTextField();
+        applyBtn1 = new javax.swing.JButton();
+        resetBtn1 = new javax.swing.JButton();
+        txtSize = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtLot = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Real Estates Management App");
@@ -172,7 +195,48 @@ public class MainFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("View Lots", MapContainer);
 
-        jPanel3.setLayout(new java.awt.BorderLayout());
+        TableReport.setLayout(new java.awt.BorderLayout());
+
+        txtSearchSize.addActionListener(this::txtSearchSizeActionPerformed);
+
+        jLabel6.setText("Search for Size (SQ Meters):");
+
+        jLabel7.setText("Search for Price (PHP):");
+
+        SearchBtn.setText("Search");
+        SearchBtn.addActionListener(this::SearchBtnActionPerformed);
+
+        javax.swing.GroupLayout SearchPanelLayout = new javax.swing.GroupLayout(SearchPanel);
+        SearchPanel.setLayout(SearchPanelLayout);
+        SearchPanelLayout.setHorizontalGroup(
+            SearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SearchPanelLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSearchSize, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtSearchPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 209, Short.MAX_VALUE)
+                .addComponent(SearchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53))
+        );
+        SearchPanelLayout.setVerticalGroup(
+            SearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SearchPanelLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(SearchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearchPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtSearchSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(SearchBtn))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+
+        TableReport.add(SearchPanel, java.awt.BorderLayout.PAGE_START);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -187,12 +251,12 @@ public class MainFrame extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jPanel3.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        TableReport.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Lots Report", jPanel3);
+        jTabbedPane1.addTab("Lots Report", TableReport);
 
-        jPanel4.setBackground(new java.awt.Color(102, 102, 102));
-        jPanel4.setLayout(new java.awt.BorderLayout());
+        ClientTab.setBackground(new java.awt.Color(102, 102, 102));
+        ClientTab.setLayout(new java.awt.BorderLayout());
 
         buyerTab.setBackground(new java.awt.Color(153, 204, 0));
         buyerTab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -208,8 +272,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         rsrvBtn.setText("Reserve");
         rsrvBtn.addActionListener(this::rsrvBtnActionPerformed);
-
-        txtB.addActionListener(this::txtBActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
         jLabel5.setText("Register as a client:");
@@ -230,7 +292,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                         .addGap(64, 64, 64))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
@@ -256,7 +318,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel5)
-                .addGap(4, 4, 4)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -272,7 +334,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(47, 47, 47)
+                .addGap(33, 33, 33)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buyBtn)
                     .addComponent(rsrvBtn))
@@ -290,17 +352,124 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(214, 214, 214)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(223, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(210, Short.MAX_VALUE))
+                .addGap(201, 201, 201))
         );
 
         buyerTab.addTab("Buyer Registration", jPanel5);
 
-        jPanel4.add(buyerTab, java.awt.BorderLayout.CENTER);
+        ClientTab.add(buyerTab, java.awt.BorderLayout.CENTER);
 
-        jTabbedPane1.addTab("Buyer", jPanel4);
+        jTabbedPane1.addTab("Buyer", ClientTab);
+
+        jPanel3.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel3.setLayout(new java.awt.BorderLayout());
+
+        jPanel8.setBackground(new java.awt.Color(102, 102, 102));
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        applyBtn1.setText("Apply");
+        applyBtn1.addActionListener(this::applyBtn1ActionPerformed);
+
+        resetBtn1.setText("Reset");
+        resetBtn1.addActionListener(this::resetBtn1ActionPerformed);
+
+        txtSize.setForeground(new java.awt.Color(102, 102, 102));
+
+        jLabel8.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 18)); // NOI18N
+        jLabel8.setText("Modify Lot Details:");
+
+        jLabel9.setText("Edit size:");
+
+        jLabel10.setText("Input block:");
+
+        jLabel11.setText("Input lot:");
+
+        jLabel12.setText("Edit price:");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                        .addGap(64, 64, 64))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtPrice)
+                            .addComponent(txtSize, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLot, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtBlock, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(resetBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(applyBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtLot, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(jLabel10)))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(applyBtn1)
+                    .addComponent(resetBtn1))
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGap(367, 367, 367)
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(363, 363, 363))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap(215, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(209, 209, 209))
+        );
+
+        jPanel3.add(jPanel8, java.awt.BorderLayout.PAGE_START);
+
+        jTabbedPane1.addTab("Modify Lots", jPanel3);
 
         jPanel1.add(jTabbedPane1, java.awt.BorderLayout.CENTER);
 
@@ -317,10 +486,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBActionPerformed
 
     private void rsrvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rsrvBtnActionPerformed
         try {
@@ -347,12 +512,12 @@ public class MainFrame extends javax.swing.JFrame {
 
             database.reportLot();
             setUpHouseGrid();
-
+            
             int index = buyerTab.indexOfTab(name);
             JPanel targetTab;
 
             if (index == -1) {
-                targetTab = new JPanel(new java.awt.GridLayout());
+                targetTab = new JPanel(new java.awt.FlowLayout());
                 targetTab.add(new JLabel("Welcome " + name));
                 targetTab.add(new JLabel("Actions for " + name));
                 buyerTab.addTab(name, targetTab);
@@ -444,12 +609,11 @@ public class MainFrame extends javax.swing.JFrame {
             database.reportLot();
             setUpHouseGrid();
 
-            // --- TAB LOGIC START ---
             int index = buyerTab.indexOfTab(name);
             JPanel targetTab;
 
             if (index == -1) {
-                targetTab = new JPanel(new java.awt.GridLayout());
+                targetTab = new JPanel(new java.awt.FlowLayout());
                 targetTab.add(new JLabel("Welcome " + name));
                 targetTab.add(new JLabel("Actions for " + name));
                 buyerTab.addTab(name, targetTab);
@@ -479,10 +643,52 @@ public class MainFrame extends javax.swing.JFrame {
 
         } catch (NumberFormatException e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Invalid number format (Blocks: [1-5] Lots:[1-20])");
-        } catch (Exception e) {
+           } catch (Exception e) {
             javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }//GEN-LAST:event_buyBtnActionPerformed
+
+    private void txtSearchSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchSizeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchSizeActionPerformed
+
+    private void SearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBtnActionPerformed
+    try {
+        String sizeInput = txtSearchSize.getText();
+        String priceInput = txtSearchPrice.getText();
+        
+        InventorySystem.getInstance().searchLot(sizeInput, priceInput);
+    } catch (Exception e) {javax.swing.JOptionPane.showMessageDialog(this, "Please enter valid search numbers.");}
+    }//GEN-LAST:event_SearchBtnActionPerformed
+
+    private void resetBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtn1ActionPerformed
+        txtSearchSize.setText("");
+        txtSearchPrice.setText("");
+        txtLot.setText("");
+        txtLot.setText("");
+
+    }//GEN-LAST:event_resetBtn1ActionPerformed
+
+    private void applyBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_applyBtn1ActionPerformed
+try {
+        int lot = Integer.parseInt(txtLot.getText());
+        int block = Integer.parseInt(txtLot.getText());
+        Double size = Double.parseDouble(txtSize.getText());
+        Double price = Double.parseDouble(txtPrice.getText());
+        
+        Lot l = InventorySystem.getInstance().findLot(block, lot);
+        l.setSqMeters(size);
+        l.setPricePerSqMeters(price);
+        
+        InventorySystem.getInstance().tableReport.setRowCount(0);
+        InventorySystem.getInstance().reportLot(block, lot);
+        setUpHouseGrid();
+        
+        javax.swing.JOptionPane.showMessageDialog(this, "Lot modified!");
+        
+        
+    } catch (Exception e) {javax.swing.JOptionPane.showMessageDialog(this, "Please enter valid search numbers.");}
+    }//GEN-LAST:event_applyBtn1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -511,10 +717,9 @@ public class MainFrame extends javax.swing.JFrame {
     
     public void setUpHouseGrid() {
     HouseGrid.removeAll(); 
-    // Use Vertical BoxLayout so blocks stack top-to-bottom
+
     HouseGrid.setLayout(new javax.swing.BoxLayout(HouseGrid, javax.swing.BoxLayout.Y_AXIS));
     
-    // Add significant padding to create the "Dashboard" feel
     HouseGrid.setBorder(new javax.swing.border.CompoundBorder(
         javax.swing.BorderFactory.createLineBorder(new Color(200, 200, 200), 1), // Card outline
         javax.swing.BorderFactory.createEmptyBorder(20, 40, 20, 40) // Internal padding
@@ -524,7 +729,6 @@ public class MainFrame extends javax.swing.JFrame {
     Block[] allBlocks = system.getBlocks();
 
     for (int i = 0; i < allBlocks.length; i++) {
-        // 1. Block Label
         JLabel blockLabel = new JLabel(" BLOCK " + (i + 1) + " ");
         JLabel SPACE = new JLabel(" ");
 
@@ -533,8 +737,6 @@ public class MainFrame extends javax.swing.JFrame {
         HouseGrid.add(blockLabel);
         HouseGrid.add(SPACE);
 
-        // 2. The Actual Grid - REMOVED the "Wrapper" that was killing the size
-        // This GridLayout will now stretch to the width of HouseGrid
         JPanel blockGrid = new JPanel(new java.awt.GridLayout(2, 10, 4, 4));
         blockGrid.setOpaque(false);
 
@@ -546,10 +748,9 @@ public class MainFrame extends javax.swing.JFrame {
         }
         
         HouseGrid.add(blockGrid);
-        HouseGrid.add(javax.swing.Box.createVerticalStrut(15)); // Space between blocks
+        HouseGrid.add(javax.swing.Box.createVerticalStrut(15));
     }
 
-    // Force the UI to realize the "Russian Doll" panels are gone
     HouseGrid.revalidate();
     HouseGrid.repaint();
 }
@@ -562,16 +763,28 @@ public class MainFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel ClientTab;
     private javax.swing.JPanel HouseGrid;
     private javax.swing.JPanel MapContainer;
     private javax.swing.JPanel MapGrid;
+    private javax.swing.JButton SearchBtn;
+    private javax.swing.JPanel SearchPanel;
+    private javax.swing.JPanel TableReport;
+    private javax.swing.JButton applyBtn1;
     private javax.swing.JButton buyBtn;
     private javax.swing.JTabbedPane buyerTab;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -580,14 +793,22 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JButton resetBtn1;
     private javax.swing.JButton rsrvBtn;
     private javax.swing.JTextField txtB;
+    private javax.swing.JTextField txtBlock;
     private javax.swing.JTextField txtL;
+    private javax.swing.JTextField txtLot;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNum;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtSearchPrice;
+    private javax.swing.JTextField txtSearchSize;
+    private javax.swing.JTextField txtSize;
     // End of variables declaration//GEN-END:variables
 }
 
